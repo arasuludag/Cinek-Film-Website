@@ -15,6 +15,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Cinek Film</title>
+        <meta name="description" content="Film & Animasyon Stüdyosu" />
         <link rel="icon" type="image/png" href="/Favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/Favicon.png" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
