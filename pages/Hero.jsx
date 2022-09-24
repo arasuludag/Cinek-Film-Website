@@ -24,33 +24,33 @@ function Hero() {
             container
             direction="column"
           >
-            <Grid item style={{margin:"8px 0"}}>
+            <Grid item style={{ margin: "8px 0" }}>
               <a
-                style={{ color: "black" }}
+                style={{ color: "white" }}
                 href="https://www.facebook.com/cinekfilm"
               >
                 <FacebookIcon />
               </a>
             </Grid>
-            <Grid item style={{margin:"8px 0"}}>
+            <Grid item style={{ margin: "8px 0" }}>
               <a
-                style={{ color: "black" }}
+                style={{ color: "white" }}
                 href="https://www.youtube.com/channel/UCAOcpcCJ753yKD9oAgvQdww"
               >
                 <YouTubeIcon />
               </a>
             </Grid>
-            <Grid item style={{margin:"8px 0"}}>
+            <Grid item style={{ margin: "8px 0" }}>
               <a
-                style={{ color: "black" }}
+                style={{ color: "white" }}
                 href="https://www.instagram.com/cinek_film/"
               >
                 <InstagramIcon />
               </a>
             </Grid>
-            <Grid item style={{margin:"8px 0"}}>
+            <Grid item style={{ margin: "8px 0" }}>
               <a
-                style={{ color: "black" }}
+                style={{ color: "white" }}
                 href="https://twitter.com/cinekfilm"
               >
                 <TwitterIcon />
