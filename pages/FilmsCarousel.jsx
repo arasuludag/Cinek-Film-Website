@@ -1,8 +1,6 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-
 import films from "../public/films.json";
-
 import Posters from "./Posters.jsx";
 
 const responsive = {
@@ -39,7 +37,6 @@ export default function FilmsCarousel() {
       swipeable={true}
       draggable={true}
       responsive={responsive}
-      ssr={true} // means to render carousel on server-side.
       infinite={true}
       keyBoardControl={true}
       transitionDuration={500}

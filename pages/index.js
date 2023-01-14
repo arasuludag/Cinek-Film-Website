@@ -1,6 +1,5 @@
 import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Element } from "react-scroll";
 
 import Navbar from "./Navbar.jsx";
 import FilmsCarousel from "./FilmsCarousel.jsx";
@@ -15,7 +14,10 @@ export default function Home() {
     <div>
       <Head>
         <title>Cinek Film</title>
-        <meta name="description" content="Film & Animasyon Stüdyosu" />
+        <meta
+          name="description"
+          content="Cinek Film kısa filmler, video klip ve animasyon filmler üzerine çalışmalar yapan bir ekiptir."
+        />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" type="image/png" href="/Favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/Favicon.png" />
@@ -28,20 +30,11 @@ export default function Home() {
 
       <Navbar />
       <Hero />
-
-      <Element name="filmsElement" />
       <h1 style={{ margin: "20px 20px", fontWeight: "300" }}>Filmler</h1>
       <FilmsCarousel />
-
-      <Element name="aboutUsElement" />
       <About />
-
-      <Element name="teamElement" />
       <Team />
-
-      <Element name="contactElement" />
       <Contact />
-
       <Footer />
     </div>
   );

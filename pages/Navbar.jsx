@@ -1,7 +1,5 @@
 import React from "react";
-import Scroll from "react-scroll";
-
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { Navbar, Nav } from "react-bootstrap";
 
 function ShowNavbar(props) {
@@ -11,50 +9,14 @@ function ShowNavbar(props) {
         <Navbar.Brand href="/">
           <img className="logo" src="CİNEK FİLM LOGO.png" alt="Logo" />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link
-              onClick={() => {
-                Scroll.scroller.scrollTo("filmsElement", {
-                  smooth: true,
-                  duration: 500,
-                });
-              }}
-            >
-              Filmler
-            </Nav.Link>
+            <Nav.Link onClick={() => {}}>Filmler</Nav.Link>
 
-            <Nav.Link
-              onClick={() => {
-                Scroll.scroller.scrollTo("aboutUsElement", {
-                  smooth: true,
-                  duration: 500,
-                });
-              }}
-            >
-              Hakkında
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
-                Scroll.scroller.scrollTo("teamElement", {
-                  smooth: true,
-                  duration: 500,
-                });
-              }}
-            >
-              Ekip
-            </Nav.Link>
-            <Nav.Link
-              onClick={() => {
-                Scroll.scroller.scrollTo("contactElement", {
-                  smooth: true,
-                  duration: 500,
-                });
-              }}
-            >
-              İletişim
-            </Nav.Link>
+            <Nav.Link onClick={() => {}}>Hakkında</Nav.Link>
+            <Nav.Link onClick={() => {}}>Ekip</Nav.Link>
+            <Nav.Link onClick={() => {}}>İletişim</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

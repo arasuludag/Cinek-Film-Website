@@ -1,7 +1,6 @@
 html,
 body {
   background-color: #000 !important;
-  padding: 0;
   margin: 0;
   font-family: "Raleway", sans-serif;
 }
@@ -27,8 +26,8 @@ p {
 
 .Hero {
   background-image: url("Hero Photo.jpg");
-  height: 100vh;
-  background-position: bottom; /* Center the image */
+  height: 75vh;
+  background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
 }
@@ -40,8 +39,8 @@ p {
 }
 
 .About {
-  max-width: 1366px;
   margin: 25px auto;
+  max-width: 1366px;
 }
 
 .AboutPhoto {

@@ -1,11 +1,10 @@
-import React, {useState} from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Slide from "@material-ui/core/Slide";
-
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
 import parse from "html-react-parser";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -27,7 +26,10 @@ export default function AlertDialogSlide(props) {
 
   return (
     <div>
-      <Button style={{color:"white", margin:"0 auto", display:"flex"}} onClick={handleClickOpen}>
+      <Button
+        style={{ color: "white", margin: "0 auto", display: "flex" }}
+        onClick={handleClickOpen}
+      >
         Daha Fazla
       </Button>
       <Dialog
@@ -43,7 +45,9 @@ export default function AlertDialogSlide(props) {
           <p>{parse(text)}</p>
         </DialogContent>
         <DialogActions>
-          <Button style={{color:"white"}} onClick={handleClose}>Kapat</Button>
+          <Button style={{ color: "white" }} onClick={handleClose}>
+            Kapat
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

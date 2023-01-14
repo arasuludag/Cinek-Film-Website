@@ -1,8 +1,6 @@
 import React from "react";
-
 import PersonCard from "./PersonCard.jsx";
-import Grid from "@material-ui/core/Grid";
-
+import Grid from "@mui/material/Grid";
 import people from "../public/team.json";
 
 function Ekip() {
@@ -17,17 +15,16 @@ function Ekip() {
   ));
 
   return (
-    <div style={{ margin: "50px auto" }}>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        spacing={0}
-      >
-        {team}
-      </Grid>
-    </div>
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+      sx={{ margin: "50px auto" }}
+    >
+      {team}
+    </Grid>
   );
 }
 

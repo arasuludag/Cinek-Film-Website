@@ -1,11 +1,11 @@
 import React from "react";
 
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
 
-import InstagramIcon from "@material-ui/icons/Instagram";
-import YouTubeIcon from "@material-ui/icons/YouTube";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import TwitterIcon from "@material-ui/icons/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
 
 function Hero() {
   return (
@@ -14,7 +14,7 @@ function Hero() {
         className="HeroGrid"
         container
         direction="row-reverse"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
       >
         <Grid item xs={9} sm={1} lg={1}>
