@@ -18,6 +18,7 @@ export default function Home() {
           name="description"
           content="Cinek Film kısa filmler, video klip ve animasyon filmler üzerine çalışmalar yapan bir ekiptir."
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" type="image/png" href="/Favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/Favicon.png" />
@@ -30,7 +31,9 @@ export default function Home() {
 
       <Navbar />
       <Hero />
-      <h1 style={{ margin: "20px 20px", fontWeight: "300" }}>Filmler</h1>
+      <h1 id="Filmler" style={{ margin: "20px 20px", fontWeight: "300" }}>
+        Filmler
+      </h1>
       <FilmsCarousel />
       <About />
       <Team />

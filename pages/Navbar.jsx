@@ -2,7 +2,14 @@ import React from "react";
 import { Container } from "@mui/material";
 import { Navbar, Nav } from "react-bootstrap";
 
-function ShowNavbar(props) {
+function ShowNavbar() {
+  function handleClickScroll(section) {
+    const element = document.getElementById(section);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <Container>
       <Navbar collapseOnSelect expand="lg" bg="transparent" variant="dark">
@@ -12,11 +19,16 @@ function ShowNavbar(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link onClick={() => {}}>Filmler</Nav.Link>
-
-            <Nav.Link onClick={() => {}}>Hakkında</Nav.Link>
-            <Nav.Link onClick={() => {}}>Ekip</Nav.Link>
-            <Nav.Link onClick={() => {}}>İletişim</Nav.Link>
+            <Nav.Link onClick={() => handleClickScroll("Filmler")}>
+              Filmler
+            </Nav.Link>
+            <Nav.Link onClick={() => handleClickScroll("About")}>
+              Hakkında
+            </Nav.Link>
+            <Nav.Link onClick={() => handleClickScroll("Team")}>Ekip</Nav.Link>
+            <Nav.Link onClick={() => handleClickScroll("Contact")}>
+              İletişim
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

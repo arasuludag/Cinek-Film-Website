@@ -3,6 +3,7 @@ body {
   background-color: #000 !important;
   margin: 0;
   font-family: "Raleway", sans-serif;
+  overflow-x: hidden;
 }
 
 a {
@@ -41,14 +42,6 @@ p {
 .About {
   margin: 25px auto;
   max-width: 1366px;
-}
-
-.AboutPhoto {
-  max-width: 90%;
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .navbar {

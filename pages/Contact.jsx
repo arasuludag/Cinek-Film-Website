@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 
 function About() {
   return (
-    <div className="Contact">
+    <div className="Contact" id="Contact">
       <Grid
         container
         direction="row"

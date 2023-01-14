@@ -16,11 +16,11 @@ function Ekip() {
 
   return (
     <Grid
+      id="Team"
       container
       direction="row"
       justifyContent="center"
       alignItems="center"
-      spacing={2}
       sx={{ margin: "50px auto" }}
     >
       {team}
