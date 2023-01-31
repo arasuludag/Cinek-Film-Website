@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 
 export default function MediaCard(props) {
   return (
-    <Card sx={{ margin: "0 10px" }}>
+    <Card>
       <img src={props.image} style={{ width: "100%" }} />
 
       <Link href={props.href}>

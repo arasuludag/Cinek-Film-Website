@@ -9,6 +9,8 @@ import Team from "./Team.jsx";
 import Contact from "./Contact.jsx";
 import Footer from "./Footer.jsx";
 
+import films from "../public/films.json";
+
 export default function Home() {
   return (
     <div>
@@ -34,7 +36,11 @@ export default function Home() {
       <h1 id="Filmler" style={{ margin: "20px 20px", fontWeight: "300" }}>
         Filmler
       </h1>
-      <FilmsCarousel />
+      <FilmsCarousel films={films} />
+      <h1 id="Filmler" style={{ margin: "20px 20px", fontWeight: "300" }}>
+        Belgeseller
+      </h1>
+      <FilmsCarousel films={films} />
       <About />
       <Team />
       <Contact />

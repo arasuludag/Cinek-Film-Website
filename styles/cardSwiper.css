@@ -1,9 +1,9 @@
-.swiper {
+.cardSwiper {
   max-width: 400px;
   width: 100%;
 }
 
-.swiper-slide {
+.cardSwiperSlide {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,48 +1,40 @@
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import films from "../public/films.json";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Posters from "./Posters.jsx";
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 6,
-    slidesToSlide: 6, // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 4,
-    slidesToSlide: 4, // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    slidesToSlide: 1, // optional, default to 1.
-  },
-};
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
 
-const posters = films.map((film, index) => (
-  <Posters
-    key={index}
-    image={"Posters/" + film.image}
-    title={film.title}
-    date={film.date}
-    href={film.href}
-  />
-));
+// import required modules
+import { FreeMode } from "swiper";
 
-export default function FilmsCarousel() {
+export default function FilmsCarousel(props) {
+  const posters = props.films.map((film, index) => (
+    <SwiperSlide className="posterSwiperSlide" key={index}>
+      <Posters
+        key={index}
+        image={"Posters/" + film.image}
+        title={film.title}
+        date={film.date}
+        href={film.href}
+      />
+    </SwiperSlide>
+  ));
+
   return (
-    <Carousel
-      swipeable={true}
-      draggable={true}
-      responsive={responsive}
-      infinite={true}
-      keyBoardControl={true}
-      transitionDuration={500}
-      containerClass="carousel-container"
-    >
-      {posters}
-    </Carousel>
+    <>
+      <Swiper
+        slidesPerView={"auto"}
+        spaceBetween={20}
+        freeMode={true}
+        pagination={{
+          dynamicBullets: true,
+        }}
+        modules={[FreeMode]}
+        className="posterSwiper"
+      >
+        {posters}
+      </Swiper>
+    </>
   );
 }

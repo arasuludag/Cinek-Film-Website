@@ -16,10 +16,10 @@ export default function Cards() {
       effect={"cards"}
       grabCursor={true}
       modules={[EffectCards]}
-      className="mySwiper"
+      className="cardSwiper"
     >
       {images.map((imageSRC, index) => (
-        <SwiperSlide key={index}>
+        <SwiperSlide key={index} className="cardSwiperSlide">
           <img
             src={imageSRC}
             key={index}
