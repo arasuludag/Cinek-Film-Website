@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "@mui/material";
 import { Navbar, Nav } from "react-bootstrap";
+import Image from "next/image";
 
 function ShowNavbar() {
   function handleClickScroll(section) {
@@ -14,7 +15,13 @@ function ShowNavbar() {
     <Container>
       <Navbar collapseOnSelect expand="lg" bg="transparent" variant="dark">
         <Navbar.Brand href="/">
-          <img className="logo" src="CİNEK FİLM LOGO.png" alt="Logo" />
+          <Image
+            width={120}
+            height={120}
+            objectFit="contain"
+            src="/CİNEK FİLM LOGO.png"
+            alt="Logo"
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

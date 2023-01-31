@@ -1,13 +1,14 @@
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper";
+import Image from "next/image";
 
 import "swiper/css";
 import "swiper/css/effect-cards";
 
 let images = [];
 for (let i = 1; i < 6; i++) {
-  images.push(`Slides/${i}.jpg`);
+  images.push(`/Slides/${i}.jpg`);
 }
 
 export default function Cards() {
@@ -20,13 +21,14 @@ export default function Cards() {
     >
       {images.map((imageSRC, index) => (
         <SwiperSlide key={index} className="cardSwiperSlide">
-          <img
+          <Image
             src={imageSRC}
             key={index}
-            style={{ objectFit: "scale-down" }}
             width="400px"
+            height="500px"
+            objectFit="scale-down"
             alt={`Poster ${index}`}
-          ></img>
+          />
         </SwiperSlide>
       ))}
     </Swiper>

@@ -9,13 +9,14 @@ import Team from "./Team.jsx";
 import Contact from "./Contact.jsx";
 import Footer from "./Footer.jsx";
 
-import films from "../public/films.json";
+import films from "./assets/films.json";
+import documentaries from "./assets/documentaries.json";
 
 export default function Home() {
   return (
     <div>
       <Head>
-        <title>Cinek Film</title>
+        <title>Cinek Film - Film & Animasyon Stüdyosu</title>
         <meta
           name="description"
           content="Cinek Film kısa filmler, video klip ve animasyon filmler üzerine çalışmalar yapan bir ekiptir."
@@ -26,21 +27,15 @@ export default function Home() {
         <link rel="shortcut icon" type="image/png" href="/Favicon.png" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap"
           rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:200,300,400,500,700&display=swap"
         />
       </Head>
 
       <Navbar />
       <Hero />
-      <h1 id="Filmler" style={{ margin: "20px 20px", fontWeight: "300" }}>
-        Filmler
-      </h1>
-      <FilmsCarousel films={films} />
-      <h1 id="Filmler" style={{ margin: "20px 20px", fontWeight: "300" }}>
-        Belgeseller
-      </h1>
-      <FilmsCarousel films={films} />
+      <FilmsCarousel posters={films} title="Filmler" />
+      <FilmsCarousel posters={documentaries} title="Belgeseller" />
       <About />
       <Team />
       <Contact />

@@ -6,6 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import parse from "html-react-parser";
+import Typography from "@mui/material/Typography";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -27,7 +28,7 @@ export default function AlertDialogSlide(props) {
   return (
     <div>
       <Button
-        style={{ color: "white", margin: "0 auto", display: "flex" }}
+        sx={{ margin: "0 auto", display: "flex" }}
         onClick={handleClickOpen}
       >
         Daha Fazla
@@ -42,7 +43,7 @@ export default function AlertDialogSlide(props) {
       >
         <DialogTitle id="alert-dialog-slide-title">{props.name}</DialogTitle>
         <DialogContent>
-          <p>{parse(text)}</p>
+          <Typography variant="p">{parse(text)}</Typography>
         </DialogContent>
         <DialogActions>
           <Button style={{ color: "white" }} onClick={handleClose}>

@@ -1,18 +1,30 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import PersonDialog from "./PersonDialog.jsx";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Image from "next/image";
 
 export default function MediaCard(props) {
   return (
     <Grid item xs={10} sm={5} lg={2}>
-      <div style={{ margin: "0 auto", height: "270px" }}>
-        <img src={props.image} alt={props.name} className="Avatar" />
-        <h4 style={{ fontWeight: "300", textAlign: "center" }}>{props.name}</h4>
-        <p style={{ color: "white", textAlign: "center" }}>{props.job}</p>
-      </div>
-      <div>
+      <Stack
+        direction="column"
+        justifyContent="space-around"
+        alignItems="center"
+        spacing={2}
+      >
+        <Image
+          src={props.image}
+          alt={props.name}
+          className="Avatar"
+          width={150}
+          height={150}
+        />
+        <Typography variant="h5">{props.name}</Typography>
+        <Typography variant="p">{props.job}</Typography>
         <PersonDialog name={props.name} text={props.text} />
-      </div>
+      </Stack>
     </Grid>
   );
 }
