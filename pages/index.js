@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Cinek Film - Film & Animasyon Stüdyosu</title>
+        <title>Cinek Film - Bağımsız Film & Animasyon Stüdyosu</title>
         <meta
           name="description"
           content="Cinek Film kısa filmler, video klip ve animasyon filmler üzerine çalışmalar yapan bir ekiptir."
