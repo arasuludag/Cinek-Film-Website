@@ -28,6 +28,8 @@ function Hero() {
             <Link
               style={{ color: "white" }}
               href="https://www.facebook.com/cinekfilm"
+              target="_blank"
+              aria-label="Facebook"
             >
               <FacebookIcon />
             </Link>
@@ -36,6 +38,8 @@ function Hero() {
             <Link
               style={{ color: "white" }}
               href="https://www.youtube.com/channel/UCAOcpcCJ753yKD9oAgvQdww"
+              target="_blank"
+              aria-label="Youtube"
             >
               <YouTubeIcon />
             </Link>
@@ -44,6 +48,8 @@ function Hero() {
             <Link
               style={{ color: "white" }}
               href="https://www.instagram.com/cinek_film/"
+              target="_blank"
+              aria-label="Instagram"
             >
               <InstagramIcon />
             </Link>
@@ -52,6 +58,8 @@ function Hero() {
             <Link
               style={{ color: "white" }}
               href="https://twitter.com/cinekfilm"
+              target="_blank"
+              aria-label="Twitter"
             >
               <TwitterIcon />
             </Link>

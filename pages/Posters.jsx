@@ -10,8 +10,8 @@ export default function MediaCard(props) {
       <Image
         src={props.image}
         alt={props.title}
-        width={300}
-        height={450}
+        width={330}
+        height={460}
         objectFit="contain"
       />
 

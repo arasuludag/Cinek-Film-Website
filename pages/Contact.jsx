@@ -44,24 +44,35 @@ function About() {
         <Link
           style={{ color: "white" }}
           href="https://www.facebook.com/cinekfilm"
+          target="_blank"
+          aria-label="Facebook"
         >
           <FacebookIcon />
         </Link>
         <Link
           style={{ color: "white" }}
           href="https://www.youtube.com/channel/UCAOcpcCJ753yKD9oAgvQdww"
+          target="_blank"
+          aria-label="Youtube"
         >
           <YouTubeIcon />
         </Link>
         <Link
           style={{ color: "white" }}
           href="https://www.instagram.com/cinek_film/"
+          target="_blank"
+          aria-label="Instagram"
         >
           <InstagramIcon />
         </Link>
-        <Link style={{ color: "white" }} href="https://twitter.com/cinekfilm">
+        <Link
+          style={{ color: "white" }}
+          href="https://twitter.com/cinekfilm"
+          target="_blank"
+          aria-label="Twitter"
+        >
           <TwitterIcon />
-        </Link>{" "}
+        </Link>
         <br /> <br />
         <Typography variant="p">
           (0362) 435 92 29 <br />

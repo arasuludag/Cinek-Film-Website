@@ -38,10 +38,10 @@ export default function AlertDialogSlide(props) {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        aria-labelledby={props.name}
+        aria-describedby={props.name + " Açıklama"}
       >
-        <DialogTitle id="alert-dialog-slide-title">{props.name}</DialogTitle>
+        <DialogTitle id={props.name + " Biyografi"}>{props.name}</DialogTitle>
         <DialogContent>
           <Typography variant="p">{parse(text)}</Typography>
         </DialogContent>

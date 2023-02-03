@@ -26,10 +26,6 @@ export default function Home() {
         <link rel="icon" type="image/png" href="/Favicon.png" />
         <link rel="shortcut icon" type="image/png" href="/Favicon.png" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:200,300,400,500,700&display=swap"
-        />
       </Head>
 
       <Navbar />

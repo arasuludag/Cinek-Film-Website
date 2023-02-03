@@ -8,7 +8,7 @@ body {
 
 .Hero {
   background-image: url("Hero Photo.jpg");
-  height: 80vh;
+  height: 70vh;
   background-position: bottom; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
