@@ -36,9 +36,9 @@ function About() {
         <Button
           variant="outlined"
           color="primary"
-          href="mailto:cinekfilm@gmail.com"
+          href="mailto:cinekfilm@hotmail.com"
         >
-          <EmailIcon /> cinekfilm@gmail.com
+          <EmailIcon /> cinekfilm@hotmail.com
         </Button>
         <br /> <br />
         <Link
