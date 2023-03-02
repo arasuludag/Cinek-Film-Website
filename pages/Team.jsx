@@ -19,6 +19,7 @@ function Ekip() {
       id="Team"
       container
       direction="row"
+      rowSpacing={10}
       justifyContent="center"
       alignItems="center"
       sx={{ margin: "100px auto" }}

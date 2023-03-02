@@ -24,8 +24,8 @@ export default function Cards() {
           <Image
             src={imageSRC}
             key={index}
-            width="400px"
-            height="500px"
+            width="450px"
+            height="560px"
             objectFit="scale-down"
             alt={`Poster ${index}`}
           />

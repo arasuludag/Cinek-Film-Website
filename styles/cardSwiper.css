@@ -1,5 +1,5 @@
 .cardSwiper {
-  max-width: 400px;
+  max-width: 450px;
   width: 100%;
 }
 
@@ -11,4 +11,10 @@
   font-size: 22px;
   font-weight: bold;
   color: #fff;
+}
+
+@media screen and (max-width: 450px) {
+  .cardSwiper {
+    width: 300px;
+  }
 }
