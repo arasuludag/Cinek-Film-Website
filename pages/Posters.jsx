@@ -6,12 +6,12 @@ import Image from "next/image";
 
 export default function MediaCard(props) {
   return (
-    <Card sx={{ background: "black", height: "625px" }}>
+    <Card sx={{ background: "black", height: "400px" }}>
       <Image
         src={props.image}
         alt={props.title}
-        width={400}
-        height={550}
+        width={270}
+        height={336}
         objectFit="contain"
       />
 

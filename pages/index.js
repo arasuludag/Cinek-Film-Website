@@ -9,8 +9,13 @@ import Team from "./Team.jsx";
 import Contact from "./Contact.jsx";
 import Footer from "./Footer.jsx";
 
-import films from "./assets/films.json";
 import documentaries from "./assets/documentaries.json";
+import latest from "./assets/latest.json"
+import animation from "./assets/animation.json"
+import horror from "./assets/horror.json"
+import comedies from "./assets/comedies.json"
+import drama from "./assets/drama.json"
+import action from "./assets/action.json"
 
 export default function Home() {
   return (
@@ -30,8 +35,13 @@ export default function Home() {
 
       <Navbar />
       <Hero />
-      <FilmsCarousel posters={films} title="Filmler" />
+      <FilmsCarousel posters={latest} title="Yeni Çıkanlar" />
       <FilmsCarousel posters={documentaries} title="Belgeseller" />
+      <FilmsCarousel posters={animation} title="Animasyon" />
+      <FilmsCarousel posters={horror} title="Korku / Gerilim" />
+      <FilmsCarousel posters={comedies} title="Komediler" />
+      <FilmsCarousel posters={drama} title="Dramalar" />
+      <FilmsCarousel posters={action} title="Aksiyon / Macera" />
       <About />
       <Team />
       <Contact />

@@ -7,11 +7,47 @@ body {
 }
 
 .Hero {
-  background-image: url("Hero Photo.jpg");
   height: 70vh;
-  background-position: bottom; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  animation: changeBackground 30s infinite;
+  transition: background-image 1s ease-in-out;
+}
+
+@keyframes changeBackground {
+  0%, 22% {
+    background-image: url("Hero Photo 1.jpg");
+  }
+  25%, 47% {
+    background-image: url("Hero Photo 2.jpg");
+  }
+  50%, 72% {
+    background-image: url("Hero Photo 3.jpg");
+  }
+  75%, 97% {
+    background-image: url("Hero Photo 4.jpg");
+  }
+  100% {
+    background-image: url("Hero Photo 1.jpg");
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 20%, 100% {
+    opacity: 0;
+  }
+  25%, 45% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.Hero::after {
+  animation: cycleImages 20s infinite, fadeInOut 20s infinite;
+  animation-delay: 5s, 0s;
 }
 
 .About {
