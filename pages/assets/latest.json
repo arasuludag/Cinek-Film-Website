@@ -1,5 +1,17 @@
 [
     {
+        "image": "KORKULUK.jpg",
+        "title": "Korkuluk",
+        "date": "Aralık 2024",
+        "href": "https://www.youtube.com/watch?v=8zIBV0vpIlc"
+    },
+    {
+        "image": "SGBY.jpg",
+        "title": "Sana Göre Bir Şey Yok",
+        "date": "Mayıs 2025",
+        "href": ""
+    },
+    {
         "image": "TERSANE.jpg",
         "title": "Tersane",
         "date": "Eylül 2023",
