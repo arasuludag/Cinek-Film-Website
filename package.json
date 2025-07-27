@@ -12,13 +12,18 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.4",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.99.0",
     "bootstrap": "^4.6.0",
     "html-react-parser": "^3.0.7",
     "next": "^12.3.1",
     "next-pwa": "^5.6.0",
+    "next-sanity": "^9.12.3",
     "react": "^18.2.0",
     "react-bootstrap": "^1.4.3",
     "react-dom": "^18.2.0",
+    "sanity": "^3.99.0",
+    "styled-components": "^6.1.19",
     "swiper": "^8.4.5"
   }
 }

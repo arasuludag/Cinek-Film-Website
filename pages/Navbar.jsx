@@ -19,7 +19,7 @@ function ShowNavbar() {
 						width={120}
 						height={120}
 						objectFit="contain"
-						src="/CİNEK FİLM LOGO.png"
+						src="/CINEK FILM LOGO.png"
 						alt="Logo"
 					/>
 				</Navbar.Brand>

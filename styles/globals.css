@@ -6,41 +6,6 @@ body {
 	background-color: black !important;
 }
 
-.Hero {
-	height: 70vh;
-	background-position: bottom;
-	background-repeat: no-repeat;
-	background-size: cover;
-	animation: changeBackground 30s infinite;
-	transition: background-image 1s ease-in-out;
-}
-
-@keyframes changeBackground {
-	0%,
-	17% {
-		background-image: url('Hero Photo 1.jpg');
-	}
-	20%,
-	37% {
-		background-image: url('Hero Photo 2.jpg');
-	}
-	40%,
-	57% {
-		background-image: url('Hero Photo 3.jpg');
-	}
-	60%,
-	77% {
-		background-image: url('Hero Photo 4.jpg');
-	}
-	80%,
-	97% {
-		background-image: url('Hero Photo 5.jpg');
-	}
-	100% {
-		background-image: url('Hero Photo 1.jpg');
-	}
-}
-
 @keyframes fadeInOut {
 	0%,
 	20%,
@@ -54,11 +19,6 @@ body {
 	50% {
 		opacity: 0;
 	}
-}
-
-.Hero::after {
-	animation: cycleImages 20s infinite, fadeInOut 20s infinite;
-	animation-delay: 5s, 0s;
 }
 
 .About {
