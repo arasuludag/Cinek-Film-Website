@@ -32,3 +32,12 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# agent notes
+CLAUDE.md
+
+# studio (sanity)
+/studio/node_modules
+/studio/dist
+/studio/.sanity
+/studio/*.tsbuildinfo

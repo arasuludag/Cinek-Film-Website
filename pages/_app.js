@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import "../styles/cardSwiper.css";
 import "../styles/posterSwiper.css";
+import "../styles/topTenSwiper.css";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
@@ -13,6 +14,7 @@ const darkTheme = createTheme({
     },
   },
   typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontWeight: 200,
     },

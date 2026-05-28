@@ -10,8 +10,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.4",
+    "@mui/icons-material": "^5.18.0",
+    "@mui/material": "^5.18.0",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.99.0",
     "bootstrap": "^4.6.0",

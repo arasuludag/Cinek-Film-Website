@@ -1,18 +1,10 @@
 import React from "react";
 import PersonCard from "./PersonCard.jsx";
 import Grid from "@mui/material/Grid";
-import people from "./assets/team.json";
+import { getImageUrl } from "../lib/sanity";
 
-function Ekip() {
-  const team = people.map((person, index) => (
-    <PersonCard
-      image={"/Team/" + person.image}
-      name={person.name}
-      job={person.job}
-      text={person.text}
-      key={index}
-    />
-  ));
+function Ekip({ teamMembers }) {
+  if (!Array.isArray(teamMembers) || teamMembers.length === 0) return null;
 
   return (
     <Grid
@@ -24,7 +16,15 @@ function Ekip() {
       alignItems="center"
       sx={{ margin: "100px auto" }}
     >
-      {team}
+      {teamMembers.map((m) => (
+        <PersonCard
+          image={getImageUrl(m.photo)}
+          name={m.name}
+          job={m.role}
+          text={m.bio || ""}
+          key={m._id}
+        />
+      ))}
     </Grid>
   );
 }

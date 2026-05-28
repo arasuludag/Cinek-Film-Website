@@ -8,6 +8,8 @@ function ShowNavbar() {
 		const element = document.getElementById(section);
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' });
+		} else {
+			window.location.href = `/#${section}`;
 		}
 	}
 
@@ -30,6 +32,7 @@ function ShowNavbar() {
 							Hakkında
 						</Nav.Link>
 						<Nav.Link onClick={() => handleClickScroll('Team')}>Ekip</Nav.Link>
+						<Nav.Link href="/Blog">Blog</Nav.Link>
 						<Nav.Link onClick={() => handleClickScroll('Contact')}>
 							İletişim
 						</Nav.Link>

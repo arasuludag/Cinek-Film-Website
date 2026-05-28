@@ -8,7 +8,7 @@ import Image from "next/image";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
+import XIcon from "@mui/icons-material/X";
 import EmailIcon from "@mui/icons-material/Email";
 import Button from "@mui/material/Button";
 
@@ -69,9 +69,9 @@ function About() {
           style={{ color: "white" }}
           href="https://twitter.com/cinekfilm"
           target="_blank"
-          aria-label="Twitter"
+          aria-label="X"
         >
-          <TwitterIcon />
+          <XIcon />
         </Link>
         <br /> <br />
         <Typography variant="p">

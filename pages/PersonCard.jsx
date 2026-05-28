@@ -23,7 +23,7 @@ export default function MediaCard(props) {
         />
         <Typography variant="h5">{props.name}</Typography>
         <Typography variant="p">{props.job}</Typography>
-        <PersonDialog name={props.name} text={props.text} />
+        <PersonDialog name={props.name} text={props.text} image={props.image} job={props.job} />
       </Stack>
     </Grid>
   );

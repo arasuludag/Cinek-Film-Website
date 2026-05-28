@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar.jsx";
 import DynamicCarousels from "./DynamicCarousels.jsx";
 import DynamicHero from "./DynamicHero.jsx";
+import TopTenCarousel from "./TopTenCarousel.jsx";
 import About from "./About.jsx";
 import Team from "./Team.jsx";
 import Contact from "./Contact.jsx";
@@ -75,9 +76,10 @@ export default function Home() {
 
       <Navbar />
       <DynamicHero heroImages={homepageData?.heroImages} />
+      <TopTenCarousel topTen={homepageData?.topTen} />
       <DynamicCarousels categories={homepageData?.categories} />
-      <About />
-      <Team />
+      <About aboutSection={homepageData?.aboutSection} />
+      <Team teamMembers={homepageData?.teamMembers} />
       <Contact />
       <Footer />
     </div>

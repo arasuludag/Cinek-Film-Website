@@ -14,22 +14,17 @@ import "swiper/css/navigation"
 // import required modules
 import { FreeMode, Navigation } from "swiper"
 
-export default function SanityFilmsCarousel({ categorySlug, title, films = [] }) {
+export default function SanityFilmsCarousel({ categorySlug, title, films = [], onFilmClick }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-
-  // If films are provided as props, use them directly
-  // Otherwise, fall back to fetching them (for backward compatibility)
   const [localFilms, setLocalFilms] = useState(films)
 
   useEffect(() => {
-    // If films are provided as props, use them
     if (films && films.length > 0) {
       setLocalFilms(films)
       return
     }
 
-    // Fallback: fetch films if not provided as props
     const fetchFilms = async () => {
       try {
         setLoading(true)
@@ -48,61 +43,75 @@ export default function SanityFilmsCarousel({ categorySlug, title, films = [] })
 
   if (loading) {
     return (
-      <div style={{ margin: "50px auto", textAlign: "center" }}>
-        <Typography variant="h3" sx={{ margin: "10px 15px" }}>
+      <Box sx={{ margin: "40px auto" }}>
+        <Typography variant="h5" sx={{ margin: "10px 32px", fontWeight: 700 }}>
           {title}
         </Typography>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
           <CircularProgress />
         </Box>
-      </div>
+      </Box>
     )
   }
 
   if (error) {
     return (
-      <div style={{ margin: "50px auto", textAlign: "center" }}>
-        <Typography variant="h3" sx={{ margin: "10px 15px" }}>
+      <Box sx={{ margin: "40px auto", textAlign: "center" }}>
+        <Typography variant="h5" sx={{ margin: "10px 32px", fontWeight: 700 }}>
           {title}
         </Typography>
-        <Typography color="error">
-          Error loading films: {error}
-        </Typography>
-      </div>
+        <Typography color="error">Error loading films: {error}</Typography>
+      </Box>
     )
   }
 
   if (localFilms.length === 0) {
-    return null // Don't render empty carousels
+    return null
   }
 
-  const renderPosters = () =>
-    localFilms.map((film) => (
-      <SwiperSlide className="posterSwiperSlide" key={film._id}>
-        <Posters
-          image={getImageUrl(film.poster)}
-          title={film.title}
-          date={film.date ? new Date(film.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' }) : ''}
-          href={film.href}
-          categories={film.categories}
-        />
-      </SwiperSlide>
-    ))
-
   return (
-    <div style={{ margin: "50px auto" }}>
-      <Typography id={title} variant="h3" sx={{ margin: "10px 15px" }}>
+    <Box sx={{ margin: "40px 0" }}>
+      <Typography
+        id={title}
+        variant="h5"
+        sx={{
+          margin: "0 32px 4px",
+          fontWeight: 700,
+          fontSize: { xs: "1.15rem", md: "1.4rem" },
+          color: "white",
+        }}
+      >
         {title}
       </Typography>
       <Swiper
         navigation={true}
         slidesPerView={"auto"}
+        spaceBetween={12}
         freeMode={true}
         modules={[FreeMode, Navigation]}
         className="posterSwiper"
       >
-        {renderPosters()}
+        {localFilms.map((film) => (
+          <SwiperSlide className="posterSwiperSlide" key={film._id}>
+            <Posters
+              image={getImageUrl(film.poster)}
+              title={film.title}
+              date={
+                film.date
+                  ? new Date(film.date).toLocaleDateString('tr-TR', {
+                      year: 'numeric',
+                      month: 'long',
+                    })
+                  : ''
+              }
+              rawDate={film.date}
+              href={film.href}
+              categories={film.categories}
+              onClick={() => onFilmClick && onFilmClick(film)}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
-    </div>
+    </Box>
   )
-} 
+}
