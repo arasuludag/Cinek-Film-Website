@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Image from 'next/image'
-import { getImageUrl } from '../lib/sanity'
+import { getImageUrl, getImageDimensions } from '../lib/sanity'
 import FilmModal from './FilmModal'
 
 import 'swiper/css'
@@ -36,6 +36,7 @@ export default function TopTenCarousel({ topTen }) {
       >
         {title}
       </Typography>
+      <Box className="topTenSwiperViewport" sx={{ overflow: 'hidden', position: 'relative', px: { xs: '16px', sm: '32px' } }}>
       <Swiper
         navigation={true}
         slidesPerView={'auto'}
@@ -47,6 +48,7 @@ export default function TopTenCarousel({ topTen }) {
         {films.map((film, idx) => {
           const rank = idx + 1
           const isTen = rank === 10
+          const { width: posterW, height: posterH } = getImageDimensions(film.poster)
           return (
             <SwiperSlide
               className={`topTenSwiperSlide${isTen ? ' is-ten' : ''}`}
@@ -59,7 +61,7 @@ export default function TopTenCarousel({ topTen }) {
                   width: '100%',
                   height: '100%',
                   display: 'flex',
-                  alignItems: 'stretch',
+                  alignItems: 'flex-end',
                   cursor: 'pointer',
                   transition: 'transform 0.25s ease',
                   '&:hover': { transform: 'scale(1.03)' },
@@ -98,7 +100,7 @@ export default function TopTenCarousel({ topTen }) {
                   sx={{
                     flex: '0 0 60%',
                     position: 'relative',
-                    aspectRatio: '2 / 3',
+                    aspectRatio: `${posterW} / ${posterH}`,
                     borderRadius: '10px',
                     overflow: 'hidden',
                     background: '#0a0a0a',
@@ -119,6 +121,7 @@ export default function TopTenCarousel({ topTen }) {
           )
         })}
       </Swiper>
+      </Box>
       <FilmModal
         film={activeFilm}
         open={Boolean(activeFilm)}

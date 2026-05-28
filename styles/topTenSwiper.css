@@ -1,7 +1,8 @@
 .topTenSwiper {
   width: 100%;
-  padding: 8px 32px 40px !important;
-  overflow: hidden;
+  padding: 8px 0 40px !important;
+  overflow: visible !important;
+  position: static !important;
 }
 
 .topTenNumeral {
@@ -42,7 +43,7 @@
     width: 260px !important;
   }
   .topTenSwiper {
-    padding: 6px 16px 32px !important;
+    padding: 6px 0 32px !important;
   }
 }
 
@@ -59,8 +60,8 @@
   transition: opacity 0.2s ease;
 }
 
-.topTenSwiper:hover .swiper-button-prev,
-.topTenSwiper:hover .swiper-button-next {
+.topTenSwiperViewport:hover .swiper-button-prev,
+.topTenSwiperViewport:hover .swiper-button-next {
   opacity: 1;
 }
 
