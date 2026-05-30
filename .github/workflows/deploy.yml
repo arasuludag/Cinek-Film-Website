@@ -48,6 +48,14 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
           sudo apt-get install -y lftp
+          # Two mirror passes, matching how the files behave:
+          # Pass 1 (_astro/): content-hashed assets are immutable — the filename changes when the
+          #   content does — so a size-only compare (--ignore-time) is safe and skips re-uploading
+          #   the unchanged image library. This is where the bandwidth is.
+          # Pass 2 (everything else): HTML/sitemap are NOT hashed, so content can change while byte
+          #   size stays identical (e.g. swapping one 8-char asset hash for another). --ignore-time
+          #   would wrongly skip them, leaving pages pointing at deleted hashes (404). Compare on
+          #   time instead to force the upload. These files are tiny, so re-uploading is cheap.
           lftp -e "
             set ftp:passive-mode true;
             set ftp:use-epsv false;
@@ -60,6 +68,7 @@ jobs:
             set mirror:use-pget-n 4;
             open ftp://$FTP_HOST;
             user $FTP_USER $FTP_PASS;
-            mirror --reverse --delete --ignore-time --verbose=1 --exclude='.ftp-deploy-sync-state.json' ./dist/ /public_html/;
+            mirror --reverse --delete --ignore-time --verbose=1 ./dist/_astro/ /public_html/_astro/;
+            mirror --reverse --delete --verbose=1 --exclude='^_astro/' --exclude='.ftp-deploy-sync-state.json' ./dist/ /public_html/;
             quit
           " 2>&1
