@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import { urlFor, type ImageWithMeta } from '../lib/image';
+
+interface Props {
+  image?: ImageWithMeta;
+  alt?: string;
+  class?: string;
+  sizes?: string;
+  widths?: number[];
+  loading?: 'lazy' | 'eager';
+  aspect?: number;
+  maxWidth?: number;
+}
+
+const {
+  image,
+  alt,
+  class: className,
+  sizes = '100vw',
+  widths = [400, 800, 1200, 1600, 2000],
+  loading = 'lazy',
+  aspect,
+  maxWidth = 2000,
+} = Astro.props;
+
+const dims = image?.asset?.metadata?.dimensions;
+const lqip = image?.asset?.metadata?.lqip;
+
+let builder = image ? urlFor(image).width(maxWidth).auto('format') : null;
+let width = maxWidth;
+let height = dims ? Math.round(maxWidth / dims.aspectRatio) : Math.round(maxWidth * 1.5);
+
+if (image && aspect) {
+  height = Math.round(maxWidth / aspect);
+  builder = urlFor(image).width(maxWidth).height(height).fit('crop').auto('format');
+}
+
+const src = builder?.url();
+const altText = alt ?? image?.alt ?? '';
+---
+
+{
+  src && (
+    <Image
+      src={src}
+      alt={altText}
+      width={width}
+      height={height}
+      widths={widths.filter((w) => w <= maxWidth)}
+      sizes={sizes}
+      loading={loading}
+      class={className}
+      style={
+        lqip
+          ? `background-image:url(${lqip});background-size:cover;background-position:center;`
+          : undefined
+      }
+    />
+  )
+}

@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+
+const BLOG_FEED = 'https://atknkrblt.blogspot.com/feeds/posts/default';
+const BLOG_HOME = 'https://atknkrblt.blogspot.com/';
+const POSTS_PER_PAGE = 12;
+
+interface BloggerEntry {
+  id?: { $t?: string };
+  title?: { $t?: string };
+  published?: { $t?: string };
+  content?: { $t?: string };
+  summary?: { $t?: string };
+  link?: { rel?: string; href?: string }[];
+  'media$thumbnail'?: { url?: string };
+}
+
+let allPosts: BloggerEntry[] = [];
+
+// Server-side fetch at build time — no CORS restrictions here.
+try {
+  const res = await fetch(`${BLOG_FEED}?alt=json&max-results=100`);
+  if (res.ok) {
+    const data = await res.json();
+    allPosts = data?.feed?.entry ?? [];
+  }
+} catch (e) {
+  console.warn('[blog] Could not fetch Blogger feed at build time:', e);
+}
+
+function getPostLink(entry: BloggerEntry): string {
+  return entry.link?.find((l) => l.rel === 'alternate')?.href ?? '#';
+}
+
+function getPostThumbnail(entry: BloggerEntry): string | null {
+  const html = entry.content?.$t ?? entry.summary?.$t ?? '';
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  const raw = match?.[1] ?? entry['media$thumbnail']?.url ?? null;
+  return raw ? raw.replace(/\/s\d+(-c)?\//, '/s800/') : null;
+}
+
+function getSnippet(entry: BloggerEntry, max = 140): string {
+  const html = entry.content?.$t ?? entry.summary?.$t ?? '';
+  const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return text.length > max ? text.slice(0, max).trimEnd() + '…' : text;
+}
+
+function formatDate(iso?: string): string {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Serialise posts for client-side pagination
+const postsJson = JSON.stringify(
+  allPosts.map((e) => ({
+    id: e.id?.$t ?? getPostLink(e),
+    title: e.title?.$t ?? 'Başlıksız',
+    date: formatDate(e.published?.$t),
+    link: getPostLink(e),
+    thumb: getPostThumbnail(e),
+    snippet140: getSnippet(e, 140),
+    snippet220: getSnippet(e, 220),
+  })),
+);
+
+const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
+---
+
+<Base title="Blog" description="Cinek Film blog yazıları — atknkrblt.blogspot.com üzerinden.">
+  <div class="page-spacer"></div>
+
+  <div class="blog-page">
+    <div class="blog-header">
+      <h1 class="blog-header__title">Blog</h1>
+      <a class="blog-header__link" href={BLOG_HOME} target="_blank" rel="noopener noreferrer">
+        atknkrblt.blogspot.com ↗
+      </a>
+    </div>
+    <hr class="blog-divider" />
+
+    <!-- Posts are rendered client-side from the embedded JSON -->
+    <div id="blog-content">
+      {allPosts.length === 0 && (
+        <p style="color:rgba(255,255,255,0.5);">Henüz yazı yok ya da yüklenemedi.</p>
+      )}
+    </div>
+
+    {totalPages > 1 && (
+      <div class="blog-pagination" id="blog-pagination"></div>
+    )}
+  </div>
+</Base>
+
+<script define:vars={{ postsJson, POSTS_PER_PAGE, totalPages }}>
+  const posts = JSON.parse(postsJson);
+  let currentPage = 1;
+
+  const contentEl = document.getElementById('blog-content');
+  const paginationEl = document.getElementById('blog-pagination');
+
+  function postCard(post, featured = false) {
+    const imgArea = post.thumb
+      ? `<img class="blog-post__thumb" src="${post.thumb}" alt="${post.title}" loading="lazy" />`
+      : `<div class="blog-post__placeholder">CINEK</div>`;
+
+    return `
+      <a class="blog-post" href="${post.link}" target="_blank" rel="noopener noreferrer">
+        <div class="blog-post__image ${featured ? 'blog-post__image--featured' : 'blog-post__image--card'}">
+          ${imgArea}
+        </div>
+        <div class="blog-post__body">
+          ${post.date ? `<div class="blog-post__date">${post.date}</div>` : ''}
+          <div class="blog-post__title ${featured ? 'blog-post__title--featured' : 'blog-post__title--card'}">${post.title}</div>
+          <div class="blog-post__snippet">${featured ? post.snippet220 : post.snippet140}</div>
+          <div class="blog-post__readmore">Devamını oku →</div>
+        </div>
+      </a>`;
+  }
+
+  function render(page) {
+    currentPage = page;
+    const start = (page - 1) * POSTS_PER_PAGE;
+    const pagePosts = posts.slice(start, start + POSTS_PER_PAGE);
+
+    let html = '';
+    if (page === 1 && pagePosts.length > 0) {
+      const [featured, ...rest] = pagePosts;
+      html += `<div class="blog-featured">${postCard(featured, true)}</div>`;
+      if (rest.length) {
+        html += `<div class="blog-grid">${rest.map((p) => postCard(p)).join('')}</div>`;
+      }
+    } else {
+      html = `<div class="blog-grid">${pagePosts.map((p) => postCard(p)).join('')}</div>`;
+    }
+
+    if (contentEl) contentEl.innerHTML = html;
+
+    // Pagination buttons
+    if (paginationEl && totalPages > 1) {
+      paginationEl.innerHTML = Array.from({ length: totalPages }, (_, i) => i + 1)
+        .map(
+          (n) =>
+            `<button class="blog-page-btn${n === page ? ' is-active' : ''}" data-page="${n}">${n}</button>`,
+        )
+        .join('');
+
+      paginationEl.querySelectorAll('[data-page]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          render(parseInt(btn.dataset.page, 10));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+  }
+
+  if (posts.length > 0) render(1);
+</script>

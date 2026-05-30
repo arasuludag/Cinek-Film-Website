@@ -1,0 +1,112 @@
+---
+import { urlFor } from '../lib/image';
+import type { TeamMember } from '../lib/queries';
+
+interface Props {
+  teamMembers: TeamMember[];
+}
+
+const { teamMembers = [] } = Astro.props;
+if (!teamMembers.length) return;
+
+function normalize(text?: string) {
+  return (text ?? '').replace(/<br\s*\/?>/gi, '\n');
+}
+---
+
+<section class="team-section reveal" id="Team">
+  {teamMembers.map((m) => {
+    const photoUrl = m.photo?.asset
+      ? urlFor(m.photo).width(300).height(300).fit('crop').auto('format').url()
+      : null;
+
+    const bio = JSON.stringify(normalize(m.bio));
+
+    return (
+      <div class="person-card">
+        {photoUrl ? (
+          <img
+            class="person-card__photo"
+            src={photoUrl}
+            alt={m.name}
+            loading="lazy"
+            decoding="async"
+            width="140"
+            height="140"
+          />
+        ) : (
+          <div class="person-card__photo" style="background:#1a1a1a;" />
+        )}
+        <div class="person-card__name">{m.name}</div>
+        {m.role && <div class="person-card__role">{m.role}</div>}
+        {m.bio && (
+          <button
+            class="bio-btn"
+            data-bio={bio}
+            data-name={m.name}
+            data-role={m.role ?? ''}
+            data-photo={photoUrl ?? ''}
+          >
+            Biyografi
+          </button>
+        )}
+      </div>
+    );
+  })}
+</section>
+
+<!-- Shared bio modal -->
+<div class="bio-modal-backdrop" id="bio-modal-backdrop" aria-modal="true" role="dialog" aria-label="Biyografi">
+  <div class="bio-modal">
+    <button class="bio-modal__close" id="bio-modal-close" aria-label="Kapat">✕</button>
+    <div class="bio-modal__header">
+      <img class="bio-modal__avatar" id="bio-modal-avatar" src="" alt="" />
+      <div>
+        <div class="bio-modal__name" id="bio-modal-name"></div>
+        <div class="bio-modal__role" id="bio-modal-role"></div>
+      </div>
+    </div>
+    <hr class="bio-modal__divider" />
+    <p class="bio-modal__text" id="bio-modal-text"></p>
+  </div>
+</div>
+
+<script>
+  const backdrop = document.getElementById('bio-modal-backdrop')!;
+  const closeBtn = document.getElementById('bio-modal-close')!;
+  const avatarEl = document.getElementById('bio-modal-avatar') as HTMLImageElement;
+  const nameEl = document.getElementById('bio-modal-name')!;
+  const roleEl = document.getElementById('bio-modal-role')!;
+  const textEl = document.getElementById('bio-modal-text')!;
+
+  function openBio(btn: HTMLElement) {
+    const name = btn.dataset.name ?? '';
+    const role = btn.dataset.role ?? '';
+    const photo = btn.dataset.photo ?? '';
+    const bio = JSON.parse(btn.dataset.bio ?? '""') as string;
+
+    avatarEl.src = photo;
+    avatarEl.alt = name;
+    avatarEl.style.display = photo ? '' : 'none';
+    nameEl.textContent = name;
+    roleEl.textContent = role;
+    roleEl.style.display = role ? '' : 'none';
+    textEl.textContent = bio;
+
+    backdrop.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBio() {
+    backdrop.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll<HTMLElement>('.bio-btn').forEach((btn) => {
+    btn.addEventListener('click', () => openBio(btn));
+  });
+
+  closeBtn.addEventListener('click', closeBio);
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeBio(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBio(); });
+</script>

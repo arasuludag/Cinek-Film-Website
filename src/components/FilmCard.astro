@@ -1,0 +1,58 @@
+---
+import SanityImage from './SanityImage.astro';
+import { urlFor } from '../lib/image';
+import type { Film } from '../lib/queries';
+
+interface Props {
+  film: Film;
+}
+
+const { film } = Astro.props;
+
+const SIX_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 6;
+const isRecent = film.date
+  ? Date.now() - new Date(film.date).getTime() < SIX_MONTHS_MS
+  : false;
+
+const dateLabel = film.date
+  ? new Date(film.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' })
+  : '';
+
+// CDN URL used in the modal's poster background (not build-time optimized, just for fallback blur).
+const posterCdnUrl = film.poster?.asset
+  ? urlFor(film.poster).width(900).auto('format').url()
+  : '';
+
+// Serialise only what the modal needs; keep it small.
+const filmJson = JSON.stringify({
+  title: film.title,
+  date: film.date ?? null,
+  href: film.href ?? null,
+  description: film.description ?? null,
+  categories: film.categories?.map((c) => c.name) ?? [],
+  posterUrl: posterCdnUrl,
+});
+---
+
+<div class="film-card" data-film={filmJson} role="button" tabindex="0" aria-label={film.title}>
+  <div class="film-card__poster">
+    {film.poster?.asset ? (
+      <SanityImage
+        image={film.poster}
+        alt={film.title}
+        sizes="(max-width:600px) 150px, (max-width:900px) 200px, 220px"
+        widths={[200, 400, 600]}
+        maxWidth={600}
+        aspect={2 / 3}
+      />
+    ) : (
+      <div style="width:100%;height:100%;background:#1a1a1a;"></div>
+    )}
+    {isRecent && <span class="film-card__new-badge">Yeni</span>}
+    <div class="film-card__overlay" aria-hidden="true"></div>
+    <div class="film-card__info">
+      <div class="film-card__title">{film.title}</div>
+      {dateLabel && <div class="film-card__date">{dateLabel}</div>}
+    </div>
+  </div>
+</div>

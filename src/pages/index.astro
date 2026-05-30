@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TopTen from '../components/TopTen.astro';
+import FilmCarousels from '../components/FilmCarousels.astro';
+import About from '../components/About.astro';
+import Team from '../components/Team.astro';
+import Contact from '../components/Contact.astro';
+import { getHomepageData } from '../lib/queries';
+
+const data = await getHomepageData();
+---
+
+<Base transparentHeader>
+  <Hero heroImages={data.heroImages} />
+  <TopTen topTen={data.topTen} />
+  <FilmCarousels categories={data.categories} />
+  <About aboutSection={data.aboutSection} />
+  <Team teamMembers={data.teamMembers} />
+  <Contact />
+</Base>

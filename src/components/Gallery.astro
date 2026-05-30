@@ -1,0 +1,143 @@
+---
+import { urlFor } from '../lib/image';
+import type { GalleryProject } from '../lib/queries';
+
+interface Props {
+  projects: GalleryProject[];
+}
+
+const { projects = [] } = Astro.props;
+
+function formatDate(iso?: string): string {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' });
+}
+
+// Flat running index so the lightbox can navigate across every image on the page.
+let globalIndex = 0;
+---
+
+{
+  projects.map((project) => {
+    const heading = project.title || project.filmTitle || '';
+    const date = formatDate(project.date);
+    return (
+      <section class="gallery-project reveal">
+        <header class="gallery-project__header">
+          <h2 class="gallery-project__title">{heading}</h2>
+          {(project.filmTitle && project.filmTitle !== heading) || date ? (
+            <div class="gallery-project__meta">
+              {project.filmTitle && project.filmTitle !== heading && (
+                <span>{project.filmTitle}</span>
+              )}
+              {date && <span>{date}</span>}
+            </div>
+          ) : null}
+          {project.description && (
+            <p class="gallery-project__desc">{project.description}</p>
+          )}
+        </header>
+
+        <div class="gallery-grid">
+          {project.images?.map((img) => {
+            if (!img.asset) return null;
+            const thumb = urlFor(img).width(800).height(600).fit('crop').auto('format').url();
+            const full = urlFor(img).width(1920).auto('format').url();
+            const caption = img.caption ?? img.alt ?? '';
+            const i = globalIndex++;
+            return (
+              <button
+                class="gallery-item"
+                data-index={i}
+                data-full={full}
+                data-caption={caption}
+                aria-label={caption || 'Fotoğrafı büyüt'}
+              >
+                <img
+                  src={thumb}
+                  alt={img.alt ?? caption ?? heading}
+                  loading="lazy"
+                  decoding="async"
+                  style={
+                    img.asset.metadata?.lqip
+                      ? `background-image:url(${img.asset.metadata.lqip});background-size:cover;background-position:center;`
+                      : undefined
+                  }
+                />
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    );
+  })
+}
+
+<!-- Shared lightbox -->
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Fotoğraf görüntüleyici">
+  <button class="lightbox__close" id="lightbox-close" aria-label="Kapat">✕</button>
+  <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Önceki">‹</button>
+  <figure class="lightbox__figure">
+    <img class="lightbox__img" id="lightbox-img" src="" alt="" />
+    <figcaption class="lightbox__caption" id="lightbox-caption"></figcaption>
+  </figure>
+  <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Sonraki">›</button>
+</div>
+
+<script>
+  const items = Array.from(document.querySelectorAll<HTMLButtonElement>('.gallery-item'));
+  const lightbox = document.getElementById('lightbox')!;
+  const imgEl = document.getElementById('lightbox-img') as HTMLImageElement;
+  const captionEl = document.getElementById('lightbox-caption')!;
+  const closeBtn = document.getElementById('lightbox-close')!;
+  const prevBtn = document.getElementById('lightbox-prev')!;
+  const nextBtn = document.getElementById('lightbox-next')!;
+
+  const slides = items.map((el) => ({
+    full: el.dataset.full ?? '',
+    caption: el.dataset.caption ?? '',
+  }));
+
+  let current = 0;
+
+  function show(index: number) {
+    current = (index + slides.length) % slides.length;
+    const slide = slides[current];
+    imgEl.src = slide.full;
+    imgEl.alt = slide.caption;
+    captionEl.textContent = slide.caption;
+    captionEl.style.display = slide.caption ? '' : 'none';
+  }
+
+  function open(index: number) {
+    show(index);
+    lightbox.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.classList.remove('is-open');
+    document.body.style.overflow = '';
+    imgEl.src = '';
+  }
+
+  const multiple = slides.length > 1;
+  prevBtn.style.display = multiple ? '' : 'none';
+  nextBtn.style.display = multiple ? '' : 'none';
+
+  items.forEach((el, i) => el.addEventListener('click', () => open(i)));
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', () => show(current - 1));
+  nextBtn.addEventListener('click', () => show(current + 1));
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft' && multiple) show(current - 1);
+    else if (e.key === 'ArrowRight' && multiple) show(current + 1);
+  });
+</script>

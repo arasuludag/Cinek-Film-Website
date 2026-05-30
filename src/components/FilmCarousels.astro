@@ -1,0 +1,189 @@
+---
+import FilmCard from './FilmCard.astro';
+import type { Category } from '../lib/queries';
+
+interface Props {
+  categories: Category[];
+}
+
+const { categories = [] } = Astro.props;
+const visibleCategories = categories.filter((c) => c.films && c.films.length > 0);
+---
+
+{visibleCategories.map((category, ci) => (
+  <section class="film-carousel-section reveal" data-carousel-section={ci}>
+    <div class="carousel-header">
+      <h2 class="carousel-title" id={category.name}>{category.name}</h2>
+    </div>
+    <div class="film-carousel-viewport">
+      <div class="embla" data-film-carousel>
+        <div class="embla__container">
+          {category.films.map((film) => (
+            <div class="embla__slide film-carousel-slide">
+              <FilmCard film={film} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <button class="carousel-btn carousel-btn--prev" aria-label="Önceki" data-carousel-prev>‹</button>
+      <button class="carousel-btn carousel-btn--next" aria-label="Sonraki" data-carousel-next>›</button>
+    </div>
+  </section>
+))}
+
+<!-- Single shared film modal for all carousels -->
+<div class="film-modal-backdrop" id="film-modal-backdrop" aria-modal="true" role="dialog" aria-label="Film detayları">
+  <div class="film-modal" id="film-modal">
+    <div class="film-modal__media" id="film-modal-media">
+      <!-- populated by JS -->
+    </div>
+    <button class="film-modal__close" id="film-modal-close" aria-label="Kapat">✕</button>
+    <div class="film-modal__body">
+      <h3 class="film-modal__title" id="film-modal-title"></h3>
+      <div class="film-modal__meta" id="film-modal-meta"></div>
+      <p class="film-modal__desc" id="film-modal-desc"></p>
+      <div id="film-modal-watch"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import { addWheelScroll } from '../lib/carousel';
+
+  // ---- Carousel instances ----
+  document.querySelectorAll<HTMLElement>('[data-film-carousel]').forEach((emblaNode) => {
+    const section = emblaNode.closest<HTMLElement>('[data-carousel-section]');
+    const prevBtn = section?.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+    const nextBtn = section?.querySelector<HTMLButtonElement>('[data-carousel-next]');
+
+    const carousel = EmblaCarousel(emblaNode, {
+      align: 'start',
+      dragFree: true,
+      containScroll: 'keepSnaps',
+      skipSnaps: true,
+    });
+
+    addWheelScroll(emblaNode, carousel);
+
+    function updateBtns() {
+      if (prevBtn) prevBtn.disabled = !carousel.canScrollPrev();
+      if (nextBtn) nextBtn.disabled = !carousel.canScrollNext();
+    }
+
+    prevBtn?.addEventListener('click', () => carousel.scrollPrev());
+    nextBtn?.addEventListener('click', () => carousel.scrollNext());
+    carousel.on('select', updateBtns);
+    carousel.on('reInit', updateBtns);
+    updateBtns();
+  });
+
+  // ---- Film modal ----
+  const backdrop = document.getElementById('film-modal-backdrop')!;
+  const mediaEl = document.getElementById('film-modal-media')!;
+  const closeBtn = document.getElementById('film-modal-close')!;
+  const titleEl = document.getElementById('film-modal-title')!;
+  const metaEl = document.getElementById('film-modal-meta')!;
+  const descEl = document.getElementById('film-modal-desc')!;
+  const watchEl = document.getElementById('film-modal-watch')!;
+
+  function getEmbedUrl(raw?: string | null): string | null {
+    if (!raw) return null;
+    try {
+      const url = new URL(raw);
+      const host = url.hostname.replace(/^www\./, '');
+      if (host === 'youtu.be') {
+        const id = url.pathname.slice(1);
+        return id ? `https://www.youtube.com/embed/${id}` : null;
+      }
+      if (host.endsWith('youtube.com')) {
+        if (url.pathname === '/watch') return `https://www.youtube.com/embed/${url.searchParams.get('v')}`;
+        const shorts = url.pathname.match(/^\/shorts\/([^/]+)/);
+        if (shorts) return `https://www.youtube.com/embed/${shorts[1]}`;
+        const embed = url.pathname.match(/^\/embed\/([^/]+)/);
+        if (embed) return `https://www.youtube.com/embed/${embed[1]}`;
+      }
+      if (host === 'vimeo.com') {
+        const id = url.pathname.split('/').filter(Boolean)[0];
+        return id ? `https://player.vimeo.com/video/${id}` : null;
+      }
+    } catch { /* noop */ }
+    return null;
+  }
+
+  function openModal(film: {
+    title: string; date?: string | null; href?: string | null;
+    description?: string | null; categories: string[]; posterUrl: string;
+  }) {
+    const embedUrl = getEmbedUrl(film.href);
+
+    // Media area
+    if (embedUrl) {
+      mediaEl.innerHTML = `
+        <div class="film-modal__embed">
+          <iframe src="${embedUrl}" title="${film.title}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+        <div class="film-modal__grad"></div>`;
+    } else if (film.posterUrl) {
+      mediaEl.innerHTML = `
+        <div class="film-modal__poster-bg" style="background-image:url(${film.posterUrl})"></div>
+        <div class="film-modal__grad"></div>`;
+    } else {
+      mediaEl.innerHTML = '';
+    }
+
+    titleEl.textContent = film.title;
+
+    // Meta: date + category chips
+    const dateStr = film.date
+      ? new Date(film.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long' })
+      : '';
+    metaEl.innerHTML = [
+      dateStr ? `<span class="film-modal__date">${dateStr}</span>` : '',
+      ...film.categories.map((c) => `<span class="film-modal__cat">${c}</span>`),
+    ].join('');
+
+    descEl.textContent = film.description ?? '';
+    descEl.style.display = film.description ? '' : 'none';
+
+    watchEl.innerHTML = film.href && !embedUrl
+      ? `<a class="film-modal__watch-btn" href="${film.href}" target="_blank" rel="noopener noreferrer">
+           İzle <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+         </a>`
+      : '';
+
+    backdrop.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Clear iframe to stop video playback
+    const iframe = mediaEl.querySelector('iframe');
+    if (iframe) iframe.src = iframe.src;
+  }
+
+  // Click on film card
+  document.addEventListener('click', (e) => {
+    const card = (e.target as HTMLElement).closest<HTMLElement>('[data-film]');
+    if (card && card.dataset.film) {
+      openModal(JSON.parse(card.dataset.film));
+    }
+  });
+
+  // Keyboard accessibility
+  document.addEventListener('keydown', (e) => {
+    const card = (e.target as HTMLElement).closest<HTMLElement>('[data-film]');
+    if (card && (e.key === 'Enter' || e.key === ' ') && card.dataset.film) {
+      e.preventDefault();
+      openModal(JSON.parse(card.dataset.film));
+    }
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+</script>

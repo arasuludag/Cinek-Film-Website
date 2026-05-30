@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Gallery from '../components/Gallery.astro';
+import { getGalleryProjects } from '../lib/queries';
+
+const projects = await getGalleryProjects();
+---
+
+<Base title="Galeri" description="Cinek Film projelerinden kamera arkası ve set fotoğrafları.">
+  <div class="page-spacer"></div>
+
+  <div class="gallery-page">
+    <div class="gallery-page__header">
+      <h1 class="gallery-page__title">Galeri</h1>
+      <span class="gallery-page__subtitle">Kamera arkası &amp; set fotoğrafları</span>
+    </div>
+    <hr class="gallery-divider" />
+
+    {projects.length === 0 ? (
+      <p style="color:rgba(255,255,255,0.5);">Henüz fotoğraf eklenmedi.</p>
+    ) : (
+      <Gallery projects={projects} />
+    )}
+  </div>
+</Base>

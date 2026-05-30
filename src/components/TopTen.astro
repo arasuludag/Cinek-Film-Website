@@ -1,0 +1,106 @@
+---
+import SanityImage from './SanityImage.astro';
+import { urlFor } from '../lib/image';
+import type { TopTen } from '../lib/queries';
+
+interface Props {
+  topTen?: TopTen;
+}
+
+const { topTen } = Astro.props;
+if (!topTen?.films?.length) return;
+
+const title = topTen.title || 'En Çok İzlenenler';
+const films = topTen.films.slice(0, 10);
+---
+
+<section class="top10-section reveal">
+  <h2 class="top10-title" id={title}>{title}</h2>
+  <div class="top10-viewport">
+    <div class="embla" data-top10-carousel>
+      <div class="embla__container">
+        {films.map((film, idx) => {
+          const rank = idx + 1;
+          const isTen = rank === 10;
+          // CDN URL only needed for the film modal's poster-bg fallback.
+          const posterCdnUrl = film.poster?.asset
+            ? urlFor(film.poster).width(900).auto('format').url()
+            : '';
+
+          const filmJson = JSON.stringify({
+            title: film.title,
+            date: film.date ?? null,
+            href: film.href ?? null,
+            description: film.description ?? null,
+            categories: film.categories?.map((c) => c.name) ?? [],
+            posterUrl: posterCdnUrl,
+          });
+
+          return (
+            <div
+              class:list={['embla__slide', 'top10-slide', { 'is-ten': isTen }]}
+              data-film={filmJson}
+              role="button"
+              tabindex="0"
+              aria-label={`${rank}. ${film.title}`}
+            >
+              <div class="top10-numeral-wrap">
+                <span class="top10-numeral">{rank}</span>
+              </div>
+              <div class="top10-poster-wrap">
+                {film.poster?.asset && (
+                  <SanityImage
+                    image={film.poster}
+                    alt={film.title}
+                    sizes="(max-width:600px) 130px, (max-width:900px) 175px, 200px"
+                    widths={[200, 400, 600]}
+                    maxWidth={600}
+                    aspect={2 / 3}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    <button class="carousel-btn carousel-btn--prev" aria-label="Önceki" data-t10-prev>‹</button>
+    <button class="carousel-btn carousel-btn--next" aria-label="Sonraki" data-t10-next>›</button>
+  </div>
+</section>
+
+<!-- Film modal is shared — rendered once in FilmCarousels.astro.
+     Top 10 clicks delegate to the same modal via the data-film attribute. -->
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import { addWheelScroll } from '../lib/carousel';
+
+  const emblaNode = document.querySelector<HTMLElement>('[data-top10-carousel]');
+  if (emblaNode) {
+    const section = emblaNode.closest<HTMLElement>('.top10-viewport')!;
+    const prevBtn = section.querySelector<HTMLButtonElement>('[data-t10-prev]');
+    const nextBtn = section.querySelector<HTMLButtonElement>('[data-t10-next]');
+
+    const carousel = EmblaCarousel(emblaNode, {
+      align: 'start',
+      dragFree: true,
+      containScroll: 'keepSnaps',
+      skipSnaps: true,
+    });
+
+    addWheelScroll(emblaNode, carousel);
+
+    function updateBtns() {
+      if (prevBtn) prevBtn.disabled = !carousel.canScrollPrev();
+      if (nextBtn) nextBtn.disabled = !carousel.canScrollNext();
+    }
+
+    prevBtn?.addEventListener('click', () => carousel.scrollPrev());
+    nextBtn?.addEventListener('click', () => carousel.scrollNext());
+    carousel.on('select', updateBtns);
+    carousel.on('reInit', updateBtns);
+    updateBtns();
+  }
+</script>

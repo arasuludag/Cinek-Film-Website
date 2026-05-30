@@ -1,0 +1,79 @@
+---
+import type { AboutSection } from '../lib/queries';
+
+interface Props {
+  aboutSection?: AboutSection;
+}
+
+const { aboutSection } = Astro.props;
+if (!aboutSection?.title && !aboutSection?.body) return;
+---
+
+<section class="about-section reveal" id="About">
+  <div class="about-section__text">
+    {aboutSection?.title && (
+      <h2 class="about-section__title">{aboutSection.title}</h2>
+    )}
+    {aboutSection?.body && (
+      <p class="about-section__body">{aboutSection.body}</p>
+    )}
+  </div>
+
+  <!-- Swiper card-stack carousel (matches original EffectCards look) -->
+  <div class="swiper card-swiper">
+    <div class="swiper-wrapper">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <div class="swiper-slide card-swiper-slide">
+          <img
+            src={`/Slides/${n}.jpg`}
+            alt={`Fotoğraf ${n}`}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .card-swiper {
+    width: 300px;
+    max-width: 90vw;
+    margin: 0 auto;
+  }
+
+  .card-swiper-slide {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #111;
+    aspect-ratio: 450 / 560;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 900px) {
+    .card-swiper { width: 360px; }
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { EffectCards } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-cards';
+
+  new Swiper('.card-swiper', {
+    effect: 'cards',
+    grabCursor: true,
+    modules: [EffectCards],
+  });
+</script>

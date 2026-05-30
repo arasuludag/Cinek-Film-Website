@@ -1,0 +1,102 @@
+---
+interface Props {
+  transparent?: boolean;
+}
+const { transparent = false } = Astro.props;
+
+const navLinks = [
+  { label: 'Hakkında', href: '/#About', scroll: 'About' },
+  { label: 'Ekip', href: '/#Team', scroll: 'Team' },
+  { label: 'Galeri', href: '/galeri/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'İletişim', href: '/#Contact', scroll: 'Contact' },
+];
+---
+
+<header class:list={['site-header', { 'is-solid': !transparent }]} id="site-header">
+  <a class="site-header__logo" href="/" aria-label="Cinek Film - Ana Sayfa">
+    <img src="/CINEK FILM LOGO.png" alt="Cinek Film" />
+  </a>
+
+  <nav class="site-header__nav" id="site-nav" aria-label="Ana Navigasyon">
+    {navLinks.map(({ label, href, scroll }) => (
+      <a
+        href={href}
+        data-scroll={scroll ?? null}
+        onclick={scroll ? `event.preventDefault();smoothScroll('${scroll}')` : null}
+      >
+        {label}
+      </a>
+    ))}
+  </nav>
+
+  <button
+    class="site-header__toggle"
+    id="nav-toggle"
+    aria-label="Menüyü aç"
+    aria-expanded="false"
+    aria-controls="site-nav"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const nav = document.getElementById('site-nav')!;
+  const toggle = document.getElementById('nav-toggle')!;
+
+  // Solidify header on scroll when transparent over hero
+  if (!header.classList.contains('is-solid')) {
+    const onScroll = () => {
+      header.classList.toggle('is-solid', window.scrollY > 40);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  function openMenu() {
+    nav.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Menüyü kapat');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    nav.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Menüyü aç');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', () => {
+    nav.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+
+  // Close on nav link click
+  nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+
+  // Close on backdrop tap (clicking the dark overlay itself, not the links)
+  nav.addEventListener('click', (e) => {
+    if (e.target === nav) closeMenu();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Smooth scroll helper used by inline onclick attrs
+  (window as any).smoothScroll = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else if (window.location.pathname !== '/') {
+      window.location.href = `/#${id}`;
+    }
+  };
+</script>
