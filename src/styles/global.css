@@ -228,18 +228,11 @@ h5, h6 { font-weight: 700; }
   .top10-slide.is-ten { width: 410px; }
 }
 
-@media (max-width: 600px) {
-  .top10-slide { width: 210px; --poster-w: 126px; }
-  .top10-slide.is-ten { width: 260px; }
-  .top10-viewport .embla__container { padding: 6px 8px 32px; }
-  .top10-title { margin: 0 16px 4px; font-size: 1.1rem; }
-}
-
 .top10-numeral-wrap {
   flex: 1 1 auto;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: flex-end;
   overflow: hidden;
   pointer-events: none;
 }
@@ -277,6 +270,19 @@ h5, h6 { font-weight: 700; }
   object-fit: cover;
   object-position: center;
   display: block;
+}
+
+/* Mobile overrides — kept after the base .top10-* rules so they actually win
+   at equal specificity (source order matters). */
+@media (max-width: 600px) {
+  .top10-slide { width: 210px; --poster-w: 124px; }
+  .top10-slide.is-ten { width: 260px; }
+  .top10-viewport .embla__container { padding: 6px 8px 24px; }
+  .top10-title { margin: 0 16px 4px; font-size: 1.1rem; }
+  /* Bigger numeral on mobile — give the digit a wide lane and let the poster
+     overlap its right edge for the Netflix-style "number behind poster" look. */
+  .top10-numeral { font-size: clamp(7rem, 30vw, 11rem); }
+  .top10-poster-wrap { margin-left: -8%; }
 }
 
 /* ---- Hero ---- */
