@@ -212,6 +212,8 @@ h5, h6 { font-weight: 700; }
 }
 
 .top10-slide {
+  /* --poster-w keeps every poster identical; is-ten only widens the numeral area. */
+  --poster-w: 174px;
   width: 290px;
   display: flex;
   align-items: flex-end;
@@ -222,26 +224,25 @@ h5, h6 { font-weight: 700; }
 .top10-slide.is-ten { width: 360px; }
 
 @media (min-width: 900px) {
-  .top10-slide { width: 330px; }
+  .top10-slide { width: 330px; --poster-w: 198px; }
   .top10-slide.is-ten { width: 410px; }
 }
 
 @media (max-width: 600px) {
-  .top10-slide { width: 210px; }
+  .top10-slide { width: 210px; --poster-w: 126px; }
   .top10-slide.is-ten { width: 260px; }
   .top10-viewport .embla__container { padding: 6px 8px 32px; }
   .top10-title { margin: 0 16px 4px; font-size: 1.1rem; }
 }
 
 .top10-numeral-wrap {
-  flex: 0 0 32%;
+  flex: 1 1 auto;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
   overflow: hidden;
   pointer-events: none;
 }
-.top10-slide.is-ten .top10-numeral-wrap { flex: 0 0 42%; }
 
 .top10-numeral {
   font-family: 'Inter', 'Helvetica Neue', 'Arial Black', sans-serif;
@@ -260,7 +261,7 @@ h5, h6 { font-weight: 700; }
 }
 
 .top10-poster-wrap {
-  flex: 0 0 60%;
+  flex: 0 0 var(--poster-w);
   position: relative;
   border-radius: 10px;
   overflow: hidden;
@@ -282,14 +283,13 @@ h5, h6 { font-weight: 700; }
 .hero {
   position: relative;
   width: 100%;
-  height: 85vh;
-  min-height: 600px;
+  /* Hero images are at least 16:9 wide (most are 2.35:1). A 16:9 box + top-anchored
+     `contain` means any letterbox falls only at the bottom — never the sides — and
+     the aspect-ratio sizing keeps the frame snug on mobile (no huge black bands). */
+  aspect-ratio: 16 / 9;
+  max-height: 100vh;
   overflow: hidden;
   background: #000;
-}
-
-@media (max-width: 768px) {
-  .hero { height: 70vh; min-height: 480px; }
 }
 
 .hero-slide {
@@ -303,7 +303,13 @@ h5, h6 { font-weight: 700; }
 .hero-slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* Images are edited with their own padding/black space — show the full frame,
+     never crop. The #000 hero background fills any letterbox area. Anchored to the
+     top so the frame touches the top edge and any black space falls to the bottom. */
+  object-fit: contain;
+  object-position: center top;
+  /* Override SanityImage's lqip cover so letterbox bands stay black, not blurred. */
+  background-image: none !important;
 }
 
 .hero-grad-v {
@@ -359,31 +365,30 @@ h5, h6 { font-weight: 700; }
   background: #fff;
 }
 
-.hero-socials {
-  position: absolute;
-  right: clamp(12px, 2.5vw, 28px);
-  top: 50%;
-  transform: translateY(-50%);
+/* Social icons live in the header nav */
+.site-header__socials {
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  z-index: 3;
+  align-items: center;
+  gap: 16px;
+}
+/* Subtle divider before the icons on desktop */
+.site-header__socials::before {
+  content: '';
+  width: 1px;
+  height: 18px;
+  background: rgba(255,255,255,0.2);
+  margin-right: 4px;
 }
 
-.hero-social-link {
-  color: rgba(255,255,255,0.85);
+.site-header__social-link {
+  color: rgba(255,255,255,0.8);
   display: flex;
   align-items: center;
   text-decoration: none;
   transition: color 0.2s;
 }
-.hero-social-link:hover { color: #fff; }
-.hero-social-link svg { width: 22px; height: 22px; }
-
-@media (max-width: 600px) {
-  .hero-social-link svg { width: 16px; height: 16px; }
-  .hero-socials { gap: 10px; right: 10px; }
-}
+.site-header__social-link:hover { color: #fff; }
+.site-header__social-link svg { width: 19px; height: 19px; }
 
 /* ---- Header / Navbar ---- */
 .site-header {
@@ -477,6 +482,9 @@ h5, h6 { font-weight: 700; }
   }
   .site-header__nav.is-open { transform: none; }
   .site-header__nav a { font-size: 1.5rem; }
+  .site-header__socials { gap: 26px; margin-top: 12px; }
+  .site-header__socials::before { display: none; }
+  .site-header__social-link svg { width: 26px; height: 26px; }
 }
 
 /* ---- About section ---- */
@@ -1050,73 +1058,119 @@ h5, h6 { font-weight: 700; }
   margin-bottom: clamp(28px, 5vw, 52px);
 }
 
-.gallery-project { margin-bottom: clamp(40px, 7vw, 72px); }
+/* ---- Gallery folders (slider) ---- */
+.gallery-folders { margin: 0 -24px; }
 
-.gallery-project__header { margin-bottom: 18px; }
-
-.gallery-project__title {
-  font-size: clamp(1.3rem, 3vw, 1.75rem);
-  font-weight: 300;
-}
-
-.gallery-project__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 6px;
-  color: rgba(255,255,255,0.4);
-  font-size: 0.78rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.gallery-project__desc {
-  margin-top: 10px;
-  max-width: 70ch;
-  color: rgba(255,255,255,0.55);
-  font-size: 0.92rem;
-  line-height: 1.7;
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-@media (max-width: 480px) { .gallery-grid { grid-template-columns: 1fr; } }
-
-.gallery-item {
+.gallery-viewport {
   position: relative;
+  overflow: hidden;
+}
+
+.gallery-viewport .embla__container {
+  padding: 8px 24px 40px;
+  gap: 16px;
+}
+
+.gallery-slide { width: 300px; }
+
+@media (max-width: 600px) {
+  .gallery-slide { width: 230px; }
+  .gallery-viewport .embla__container { padding: 6px 16px 32px; gap: 12px; }
+}
+
+@media (min-width: 900px) {
+  .gallery-slide { width: 320px; }
+}
+
+.gallery-folder {
   display: block;
+  width: 100%;
   padding: 0;
   border: none;
-  background: #141414;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  /* Stacked-folder effect behind the cover. */
+  position: relative;
+  transition: transform 0.25s ease;
+}
+.gallery-folder::before,
+.gallery-folder::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  border-radius: 12px;
+  background: #1d1d1d;
+  z-index: 0;
+}
+.gallery-folder::before { top: -8px; bottom: auto; height: 16px; }
+.gallery-folder:hover { transform: translateY(-4px); }
+
+.gallery-folder__cover {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  border-radius: 12px;
   overflow: hidden;
-  border-radius: 8px;
-  aspect-ratio: 4 / 3;
+  background: #141414;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+  z-index: 1;
 }
 
-.gallery-item img {
+.gallery-folder__cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease, opacity 0.3s ease;
+  transition: transform 0.5s ease;
 }
+.gallery-folder:hover .gallery-folder__cover img { transform: scale(1.06); }
 
-.gallery-item::after {
-  content: '';
+.gallery-folder__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.18);
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%);
+  pointer-events: none;
 }
 
-.gallery-item:hover img { transform: scale(1.06); }
-.gallery-item:hover::after { opacity: 1; }
-.gallery-item:focus-visible { outline: 2px solid rgba(255,255,255,0.7); outline-offset: 2px; }
+.gallery-folder__count {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.gallery-folder__count svg { opacity: 0.85; }
+
+.gallery-folder__info {
+  padding: 12px 4px 0;
+}
+
+.gallery-folder__title {
+  display: block;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.gallery-folder__meta {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 
 /* ---- Lightbox ---- */
 .lightbox {
